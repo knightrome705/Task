@@ -22,7 +22,7 @@ class _ProductsState extends State<Products> {
           var data=controller.productList[index];
           return ListTile(
             leading: CircleAvatar(
-              backgroundImage: NetworkImage(''),
+              backgroundImage: NetworkImage(),
             ),
             title: Text("Name"),
             subtitle: Text("Rating"),

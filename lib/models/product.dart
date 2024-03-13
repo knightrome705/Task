@@ -2,92 +2,137 @@
 //
 //     final product = productFromJson(jsonString);
 
+import 'package:meta/meta.dart';
 import 'dart:convert';
 
-Product productFromJson(String str) => Product.fromJson(json.decode(str));
+List<Product> productFromJson(String str) => List<Product>.from(json.decode(str).map((x) => Product.fromJson(x)));
 
-String productToJson(Product data) => json.encode(data.toJson());
+String productToJson(List<Product> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Product {
-  List<ProductElement> products;
-  int total;
-  int skip;
-  int limit;
+  int id;
+  Brand? brand;
+  String name;
+  String price;
+  dynamic priceSign;
+  dynamic currency;
+  String imageLink;
+  String productLink;
+  String websiteLink;
+  String description;
+  double rating;
+  String category;
+  String productType;
+  List<dynamic> tagList;
+  DateTime createdAt;
+  DateTime updatedAt;
+  String productApiUrl;
+  String apiFeaturedImage;
+  List<ProductColor> productColors;
 
   Product({
-    this.products,
-    this.total,
-    this.skip,
-    this.limit,
+    required this.id,
+    required this.brand,
+    required this.name,
+    required this.price,
+    required this.priceSign,
+    required this.currency,
+    required this.imageLink,
+    required this.productLink,
+    required this.websiteLink,
+    required this.description,
+    required this.rating,
+    required this.category,
+    required this.productType,
+    required this.tagList,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.productApiUrl,
+    required this.apiFeaturedImage,
+    required this.productColors,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
-    products: List<ProductElement>.from(json["products"].map((x) => ProductElement.fromJson(x))),
-    total: json["total"],
-    skip: json["skip"],
-    limit: json["limit"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "products": List<dynamic>.from(products.map((x) => x.toJson())),
-    "total": total,
-    "skip": skip,
-    "limit": limit,
-  };
-}
-
-class ProductElement {
-  int id;
-  String title;
-  String description;
-  int price;
-  double discountPercentage;
-  double rating;
-  int stock;
-  String brand;
-  String category;
-  String thumbnail;
-  List<String> images;
-
-  ProductElement({
-    this.id,
-    this.title,
-    this.description,
-    this.price,
-    this.discountPercentage,
-    this.rating,
-    this.stock,
-    this.brand,
-    this.category,
-    this.thumbnail,
-    this.images,
-  });
-
-  factory ProductElement.fromJson(Map<String, dynamic> json) => ProductElement(
     id: json["id"],
-    title: json["title"],
-    description: json["description"],
+    brand: brandValues.map[json["brand"]],
+    name: json["name"],
     price: json["price"],
-    discountPercentage: json["discountPercentage"].toDouble(),
+    priceSign: json["price_sign"],
+    currency: json["currency"],
+    imageLink: json["image_link"],
+    productLink: json["product_link"],
+    websiteLink: json["website_link"],
+    description: json["description"],
     rating: json["rating"].toDouble(),
-    stock: json["stock"],
-    brand: json["brand"],
     category: json["category"],
-    thumbnail: json["thumbnail"],
-    images: List<String>.from(json["images"].map((x) => x)),
+    productType: json["product_type"],
+    tagList: List<dynamic>.from(json["tag_list"].map((x) => x)),
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
+    productApiUrl: json["product_api_url"],
+    apiFeaturedImage: json["api_featured_image"],
+    productColors: List<ProductColor>.from(json["product_colors"].map((x) => ProductColor.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "title": title,
-    "description": description,
+    "brand": brandValues.reverse[brand],
+    "name": name,
     "price": price,
-    "discountPercentage": discountPercentage,
+    "price_sign": priceSign,
+    "currency": currency,
+    "image_link": imageLink,
+    "product_link": productLink,
+    "website_link": websiteLink,
+    "description": description,
     "rating": rating,
-    "stock": stock,
-    "brand": brand,
     "category": category,
-    "thumbnail": thumbnail,
-    "images": List<dynamic>.from(images.map((x) => x)),
+    "product_type": productType,
+    "tag_list": List<dynamic>.from(tagList.map((x) => x)),
+    "created_at": createdAt.toIso8601String(),
+    "updated_at": updatedAt.toIso8601String(),
+    "product_api_url": productApiUrl,
+    "api_featured_image": apiFeaturedImage,
+    "product_colors": List<dynamic>.from(productColors.map((x) => x.toJson())),
   };
+}
+
+enum Brand {
+  MAYBELLINE
+}
+
+final brandValues = EnumValues({
+  "maybelline": Brand.MAYBELLINE
+});
+
+class ProductColor {
+  String hexValue;
+  String colourName;
+
+  ProductColor({
+    required this.hexValue,
+    required this.colourName,
+  });
+
+  factory ProductColor.fromJson(Map<String, dynamic> json) => ProductColor(
+    hexValue: json["hex_value"],
+    colourName: json["colour_name"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "hex_value": hexValue,
+    "colour_name": colourName,
+  };
+}
+
+class EnumValues<T> {
+  Map<String, T> map;
+  late Map<T, String> reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    reverseMap = map.map((k, v) => MapEntry(v, k));
+    return reverseMap;
+  }
 }
