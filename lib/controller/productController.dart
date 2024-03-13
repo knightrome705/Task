@@ -5,7 +5,7 @@ import 'package:untitled9/services/product_details.dart';
 
 
 class ProductController extends GetxController{
-  var productList=List<Product>[].obs;
+  var productList=<Product>[].obs;
   void fetchProducts()async{
     var product=await RemoteServices.fetchProducts();
     if(product!=null){

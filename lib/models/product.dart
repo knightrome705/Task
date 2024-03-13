@@ -11,7 +11,7 @@ String productToJson(List<Product> data) => json.encode(List<dynamic>.from(data.
 
 class Product {
   int id;
-  Brand? brand;
+  Brand brand;
   String name;
   String price;
   dynamic priceSign;
